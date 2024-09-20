@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    environment:
+      POSTGRES_USER: projectpart3_user
+      POSTGRES_PASSWORD: XQaWfaGgeY22576Upiutu8ffuvkj3Mcs
+      POSTGRES_DB: projectpart3
+    ports:
+      - "5433:5432"  # Note: The internal port for PostgreSQL is usually 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  book_catalog:
+    build: ./book_catalog
+    container_name: book_catalog
+    environment:
+      DATABASE_URL: "postgresql://projectpart3_user:XQaWfaGgeY22576Upiutu8ffuvkj3Mcs@postgres/projectpart3"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+
+  inventory_management:
+    build: ./inventory_management
+    container_name: inventory_management
+    environment:
+      DATABASE_URL: "postgresql://projectpart3_user:XQaWfaGgeY22576Upiutu8ffuvkj3Mcs@postgres/projectpart3"
+    ports:
+      - "8001:8001"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
